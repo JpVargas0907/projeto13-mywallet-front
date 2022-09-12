@@ -1,8 +1,19 @@
 import styled from "styled-components";
+import { Link, useNavigate } from 'react-router-dom';
+import { useContext } from "react";
+import UserContext from "../../contexts/UserContext";
 
 export default function NewEntranceButton(){
+    const navigate = useNavigate();
+    const { setTransictionType } = useContext(UserContext);
+
+    function navigateToNewTransictionScreen(){
+        navigate('/new-transiction');
+        setTransictionType('Entrada');
+    }
+
     return(
-            <NewTransictionButtonContent>
+            <NewTransictionButtonContent onClick={navigateToNewTransictionScreen}>
                 <ion-icon name="add-circle-outline"></ion-icon>
                 <p>Nova Entrada</p>
             </NewTransictionButtonContent>

@@ -3,7 +3,10 @@ import styled from 'styled-components';
 import logo from '../../assets/_imgs/MyWallet.png';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useContext } from "react";
 import UserContext from "../../contexts/UserContext";
+import { ThreeDots } from 'react-loader-spinner';
+
 
 export default function LoginScreen() {
     return(
@@ -32,15 +35,65 @@ const Logo = styled.img`
 `
 
 function LoginForm(){
+    const navigate = useNavigate();
+    const { token, setToken } = useContext(UserContext);
+    const [ loading, setLoading ] = useState(false);
+
+    function login(event) {
+        event.preventDefault();
+        const URL = 'localhost:5000/login';
+        const promise = axios.post(URL, loginData);
+
+        setLoading(true);
+
+        promise.then((res) => {
+            const { token } = res.data;
+            setToken(token);
+            setLoading(false);
+            navigate('/home');
+        })
+
+        promise.catch((err) => {
+            alert(`Vish deu ruim :( Cadastres-se ou tente novamente!`);
+            setLoading(false);
+        })
+    }
+
+    const [loginData, setLoginData] = useState({
+        email: "",
+        password: ""
+    });
+
+    const {email, password} = loginData; 
+
+    function handleForm(e) {
+        setLoginData({
+            ...loginData,
+            [e.target.name]: e.target.value,
+        })
+    }
+
     return (
         <FormContainer>
             <InputStyle 
+                type="email"
+                id='email'
                 placeholder='E-mail'
+                required
+                name='email'
+                onChange={handleForm}
+                value={email}
             />
             <InputStyle 
+                type="password"
+                id='password'
                 placeholder='Senha'
+                required
+                name='password'
+                onChange={handleForm}
+                value={password}
             />
-            <LoginButton>Entrar</LoginButton>
+            <LoginButton type="submit">{loading ? <ThreeDots color="#FFFFFF" height={60} width={60} /> : "Entrar"}</LoginButton>
             <Link to={'/register'}>
                 <Span>Primeira vez? Cadastre-se!</Span>
             </Link>

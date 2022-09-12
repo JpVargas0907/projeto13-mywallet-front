@@ -4,6 +4,7 @@ import logo from '../../assets/_imgs/MyWallet.png';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import UserContext from "../../contexts/UserContext";
+import { useContext } from 'react';
 
 export default function NewTransictionScreen() {
     return(
@@ -30,16 +31,72 @@ const Logo = styled.img`
 `
 
 function NewTransictionForm(){
+    const { transictionType, balance, setBalance, token } = useContext(UserContext);
+    const { value, setValue } = useState(0);
+    const { description, setDescription } = useState("");
+    const navigate = useNavigate();
+
+    function updateBalance(value, transictionType){
+        if(transictionType === 'Entrada'){
+            setBalance(balance + value);
+        } else if(transictionType === 'Saída'){
+            setBalance(balance - value);
+        }
+    }
+
+    function sendNewTransiction(event){
+        event.preventDefault();
+
+        const newTransiction = {
+            value: value,
+            description: description
+        };
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+
+        const URL = 'localhost:5000/transictions';
+
+        updateBalance(value, transictionType);
+
+        if(transictionType === 'Entrada'){
+            const promise = axios.post(URL, newTransiction, config);
+            promise.then(res => {
+                alert('Transação registrada com sucesso!');
+                navigate('/home');
+            });
+
+            promise.catch(err => {
+                alert('Não foi possível registrar sua transação. Tente novamente!');
+            });
+        } else if(transictionType === 'Saída'){
+
+        }
+    }
+
     return (
-        <FormContainer>
-            <p>Nova entrada / Saída</p>
+        <FormContainer onSubmit={sendNewTransiction}>
+            <p>Nova {transictionType}</p>
             <InputStyle 
+                type="number"
                 placeholder='Valor'
+                required
+                onChange={(e) =>
+                    setValue(e.target.value)
+                }
             />
             <InputStyle 
+                type="text"
                 placeholder='Descrição'
+                required
+                onChange={(e) =>
+                    setDescription(e.target.value)
+                }
             />
-            <RegisterTransictionButton>Salvar Entrada / Saída</RegisterTransictionButton>
+            <RegisterTransictionButton type="submit" onClick={sendNewTransiction}>Salvar {transictionType}</RegisterTransictionButton>
         </FormContainer>
     );
 }

@@ -32,21 +32,80 @@ const Logo = styled.img`
 `
 
 function RegisterForm(){
+    const navigate = useNavigate();
+
+    function register(event) {
+        event.preventDefault();
+        const URL = 'localhost:5000/register';
+        const promise = axios.post(URL, registerData);
+
+        promise.then(() => {
+            navigate("/");
+        })
+
+        promise.catch(() => {
+            alert("Preenchido de forma incorreta ou usuário já foi cadastrado.");
+        })
+
+        setRegisterData()
+    }
+
+    const [registerData, setRegisterData] = useState({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: ""
+        
+    });
+
+    const {name, email, password, confirmPassword} = registerData; 
+
+    function handleForm(e) {
+        setRegisterData({
+            ...registerData,
+            [e.target.name]: e.target.value,
+        })
+    }
+
     return (
         <FormContainer>
             <InputStyle 
+                type="text"
+                id='name'
                 placeholder='Nome'
+                required
+                name='name'
+                onChange={handleForm}
+                value={name}
             />
             <InputStyle 
+                type="email"
+                id='email'
                 placeholder='E-mail'
-            />
-                        <InputStyle 
-                placeholder='Senha'
+                required
+                name='email'
+                onChange={handleForm}
+                value={email}
             />
             <InputStyle 
-                placeholder='Confirmar a senha'
+                type="text"
+                id='password'
+                placeholder='Senha'
+                required
+                name='password'
+                onChange={handleForm}
+                value={password}
             />
-            <RegisterButton>Cadastrar</RegisterButton>
+            <InputStyle 
+                type="text"
+                id='confirmPassword'
+                placeholder='Confirmar a senha'
+                required
+                name='confirmPassword'
+                onChange={handleForm}
+                value={confirmPassword}
+            />
+            <RegisterButton type='submit'>Cadastrar</RegisterButton>
             <Link to={'/'}>
                 <Span>Já tem uma conta? Entre agora!</Span>
             </Link>
