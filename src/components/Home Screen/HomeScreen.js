@@ -31,7 +31,9 @@ function HomeContent(){
         <HomeContainer>
             <Header>
                 <p>Olá, Fulano</p>
-                <ion-icon name="log-out-outline"></ion-icon>
+                <Link to={'/'}>
+                    <ion-icon name="log-out-outline"></ion-icon>
+                </Link>      
             </Header>
             <TransictionsResume />
             <OperationsButtons>

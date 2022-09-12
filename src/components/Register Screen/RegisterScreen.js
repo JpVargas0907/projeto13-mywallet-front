@@ -36,7 +36,7 @@ function RegisterForm(){
 
     function register(event) {
         event.preventDefault();
-        const URL = 'localhost:5000/register';
+        const URL = 'http://localhost:5000/register';
         const promise = axios.post(URL, registerData);
 
         promise.then(() => {
@@ -50,15 +50,15 @@ function RegisterForm(){
         setRegisterData()
     }
 
+    
     const [registerData, setRegisterData] = useState({
         name: "",
         email: "",
         password: "",
         confirmPassword: ""
-        
-    });
+    }); 
 
-    const {name, email, password, confirmPassword} = registerData; 
+    const { name, email, password, confirmPassword } = registerData;
 
     function handleForm(e) {
         setRegisterData({
@@ -67,8 +67,10 @@ function RegisterForm(){
         })
     }
 
+    console.log(registerData);
+
     return (
-        <FormContainer>
+        <FormContainer onSubmit={register}>
             <InputStyle 
                 type="text"
                 id='name'
@@ -113,7 +115,7 @@ function RegisterForm(){
     );
 }
 
-const FormContainer = styled.div`
+const FormContainer = styled.form`
     display: flex;
     flex-direction: column;
     align-items: center;

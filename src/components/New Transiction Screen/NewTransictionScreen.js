@@ -49,7 +49,8 @@ function NewTransictionForm(){
 
         const newTransiction = {
             value: value,
-            description: description
+            description: description,
+            transictionType: transictionType
         };
 
         const config = {
@@ -58,7 +59,7 @@ function NewTransictionForm(){
             }
         }
 
-        const URL = 'localhost:5000/transictions';
+        const URL = 'http://localhost:5000/transictions';
 
         updateBalance(value, transictionType);
 

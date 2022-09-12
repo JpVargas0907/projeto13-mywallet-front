@@ -4,7 +4,7 @@ import UserContext from "../../contexts/UserContext";
 import axios from "axios";
 
 export default function TransictionsResume() {
-    const { token } = useContext(UserContext);
+    const { token, balance, setBalance } = useContext(UserContext);
     const [transictionsList, setTransictionsList] = useState([]);
 
     useEffect(() => {
@@ -31,6 +31,11 @@ export default function TransictionsResume() {
         if(transictionsList.length > 0){
             transictionsList.map(transiction => {
                 const { id, date, description, value } = transiction;
+                if(value > 0){
+                    setBalance(balance + value);
+                } else if(value < 0){
+                    setBalance(balance - value);
+                }
                 return <Transiction key={id} id={id} date={date} description={description} value={value}/>
             });
         } else {
@@ -93,4 +98,8 @@ const Description = styled.p`
 
 const Value = styled.p`
     color: ${props => props.value > 0 ? "#03AC00" : "#C70000"};
+`
+
+const Total = styled.p`
+    color: ${props => props.balance > 0 ? "#03AC00" : "#C70000"};
 `

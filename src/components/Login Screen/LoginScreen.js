@@ -36,12 +36,12 @@ const Logo = styled.img`
 
 function LoginForm(){
     const navigate = useNavigate();
-    const { token, setToken } = useContext(UserContext);
+    const { setToken } = useContext(UserContext);
     const [ loading, setLoading ] = useState(false);
 
     function login(event) {
         event.preventDefault();
-        const URL = 'localhost:5000/login';
+        const URL = 'http://localhost:5000/login';
         const promise = axios.post(URL, loginData);
 
         setLoading(true);
@@ -49,7 +49,6 @@ function LoginForm(){
         promise.then((res) => {
             const { token } = res.data;
             setToken(token);
-            setLoading(false);
             navigate('/home');
         })
 
@@ -74,7 +73,7 @@ function LoginForm(){
     }
 
     return (
-        <FormContainer>
+        <FormContainer onSubmit={login}>
             <InputStyle 
                 type="email"
                 id='email'
@@ -102,7 +101,7 @@ function LoginForm(){
     );
 }
 
-const FormContainer = styled.div`
+const FormContainer = styled.form`
     display: flex;
     flex-direction: column;
     align-items: center;
