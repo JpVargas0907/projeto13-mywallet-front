@@ -49,7 +49,7 @@ function LoginForm(){
         promise.then((res) => {
             const { token } = res.data;
             setToken(token);
-            navigate('/products');
+            navigate('/home');
         })
 
         promise.catch((err) => {
